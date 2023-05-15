@@ -19,7 +19,7 @@ spec:
       - name: stable-diffusion-webui
         image: us-central1-docker.pkg.dev/flius-vpc-2/stable-diffusion-repo/sd-webui-final:0.1
         command: ["/bin/bash"]
-        args: ["-c", "source /runtime-lib/bin/activate; cp /user-watch.py /runtime-lib/stable-diffusion-webui/user-watch.py; cp /start.sh /runtime-lib/stable-diffusion-webui/user-watch.py; cd /runtime-lib/stable-diffusion-webui;  python3 launch.py --listen --xformers --enable-insecure-extension-access --no-gradio-queue"]
+        args: ["-c", "source /runtime-lib/bin/activate; cp /user-watch.py /runtime-lib/stable-diffusion-webui/user-watch.py; cp /start.sh /runtime-lib/stable-diffusion-webui/start.sh; cd /runtime-lib/stable-diffusion-webui;  python3 launch.py --listen --xformers --enable-insecure-extension-access --no-gradio-queue"]
         volumeMounts:
           - mountPath: "/runtime-lib"
             name: runtime-lib 
