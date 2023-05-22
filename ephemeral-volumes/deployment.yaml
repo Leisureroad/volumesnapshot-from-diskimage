@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stable-diffusion-deployment-final
+  labels:
+    app: stable-diffusion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stable-diffusion
+  template:
+    metadata:
+      labels:
+        app: stable-diffusion
+    spec:
+      volumes:
+        - name: runtime-lib 
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  type: sd-lib-image 
+              spec:
+                dataSource:
+                  name: test-snapshot
+                  kind: VolumeSnapshot
+                  apiGroup: snapshot.storage.k8s.io
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: "standard-rwo"
+                resources:
+                  requests:
+                    storage: 30Gi
+      containers:
+      - name: stable-diffusion-webui
+        image: us-central1-docker.pkg.dev/flius-vpc-2/stable-diffusion-repo/sd-webui-final:0.1
+        command: ["/bin/bash"]
+        args: ["-c", "source /runtime-lib/bin/activate; cp /user-watch.py /runtime-lib/stable-diffusion-webui/user-watch.py; cp /start.sh /runtime-lib/stable-diffusion-webui/start.sh; cd /runtime-lib/stable-diffusion-webui;  python3 launch.py --listen --xformers --enable-insecure-extension-access --no-gradio-queue"]
+        volumeMounts:
+          - mountPath: "/runtime-lib"
+            name: runtime-lib 
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        ports:
+          - containerPort: 7860

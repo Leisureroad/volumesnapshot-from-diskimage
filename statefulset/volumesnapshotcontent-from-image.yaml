@@ -1,0 +1,13 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotContent
+metadata:
+  name: test-snapshotcontent-from-image
+spec:
+  deletionPolicy: Retain
+  driver: pd.csi.storage.gke.io
+  volumeSnapshotClassName: image-class
+  source:
+    snapshotHandle: projects/flius-vpc-2/global/images/sd-image 
+  volumeSnapshotRef:
+    name: test-snapshot
+    namespace: default
