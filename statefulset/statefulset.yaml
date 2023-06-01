@@ -28,11 +28,6 @@ spec:
             nvidia.com/gpu: 1
         ports:
           - containerPort: 7860
-        env:
-          - name: MY_POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.name
   volumeClaimTemplates:
   - metadata:
       name: runtime-lib 
